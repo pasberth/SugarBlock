@@ -6,12 +6,26 @@ module SugarBlock
     class MatchBlock < NestedBlock
       def call *args, &block
         @args = args
+        @cases = []
         block.call
+
+        begin
+          @cases.each &:call
+        ensure
+          @finnaly_proc and @finnaly_proc.call
+        end
+
         @result
       end
 
       def case? *os, &block
-        os.each { |o| _case? o, &block }
+        @cases << lambda { os.each { |o| _case? o, &block } }
+        true
+      end
+
+      def finally &block
+        @finnaly_proc = block
+        true
       end
 
       private
