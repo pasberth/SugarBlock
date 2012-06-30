@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'spec_helper'
 
 describe do
@@ -95,5 +96,24 @@ describe do
 
   example do
     expect { subject.match("dummy") { subject.case?("dummy") {} } }.should_not raise_error
+  end
+
+  example do
+    subject.match("dummy") do
+      subject.case?("dummy") do
+        expect { subject.case?("dummy") {} }.should raise_error NoMethodError
+      end
+    end
+  end
+
+
+  example do
+    subject.match("dummy") do
+      subject.case?("dummy") do
+        pending "ネスト可能にする？" do
+          expect { subject.match("dummy"){} }.should_not raise_error
+        end
+      end
+    end
   end
 end
