@@ -3,7 +3,7 @@ module SugarBlock
 
   module Sugar
 
-    class MatchBlock < Block::NestedBlock
+    class MatchBlock < NestedBlock
       def call *args, &block
         @args = args
         block.call
@@ -37,7 +37,7 @@ module SugarBlock
 
     module MatchSuger
 
-      include SugarBlock::Block::Nestable
+      include Nestable
 
       def has_block? keyword
         :match == keyword or super
