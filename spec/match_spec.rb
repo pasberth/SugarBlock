@@ -110,9 +110,7 @@ describe do
   example do
     subject.match("dummy") do
       subject.case?("dummy") do
-        pending "ネスト可能にする？" do
-          expect { subject.match("dummy"){} }.should_not raise_error
-        end
+        expect { subject.match("dummy"){} }.should_not raise_error
       end
     end
   end
