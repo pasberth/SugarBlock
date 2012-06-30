@@ -14,7 +14,7 @@ match "hoge" do
   end
   
   case? "hoge" do
-    puts "this code will be not executed."
+    puts "this code will not be executed."
   end
 end
 

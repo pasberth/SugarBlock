@@ -1,5 +1,6 @@
 
 module SugarBlock
+
   module Sugar
 
     class MatchBlock < Block::NestedBlock
@@ -31,6 +32,19 @@ module SugarBlock
             @result
           end
         end
+      end
+    end
+
+    module MatchSuger
+
+      include SugarBlock::Block::Nestable
+
+      def has_block? keyword
+        :match == keyword or super
+      end
+
+      def create_block keyword
+        :match == keyword && MatchBlock.new(self) or super
       end
     end
   end
