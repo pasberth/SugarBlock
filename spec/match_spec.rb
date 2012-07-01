@@ -39,54 +39,60 @@ describe SugarReciever do
     end
   end
 
-  example do
-    |; a|
-    expect do
+  context "Class matching" do
+    example "block cases." do
+
       subject.instance_eval do
-        match "hoge" do
-          case?("hoge") { raise TypeError }
-          finally do
-             # this code will execute in all times finally.
-             a = "piyo"
+        (match ["this is array"] do
+           case?(Symbol) { :symbol }
+           case?(Hash) { :hash }
+           case?(Array) { :array }
+         end).should == :array
+      end
+    end
+
+    example "hash cases." do
+
+      subject.instance_eval do
+        (match ["this is array"] do
+           case?(Symbol => :symbol)
+           case?(Hash => :hash)
+           case?(Array => :array)
+         end).should == :array
+      end
+    end
+  end
+
+  context "Finally process" do
+
+    example "about the return value and finally process." do
+
+      subject.instance_eval do
+        |; a|
+  
+        (match "hoge" do
+          case?("hoge") { a.should == nil; a = "fuga" }
+          finally { a.should == "fuga"; a = "piyo" }
+        end).should == "fuga"
+        
+        a.should == "piyo"
+      end
+    end
+
+
+    example "about raising error." do
+      |; a|
+      expect do
+        subject.instance_eval do
+          match "hoge" do
+            case?("hoge") { raise TypeError }
+            finally do
+              # this code will execute in all times finally.
+              a = "piyo"
+            end
           end
         end
-      end
-    end.should raise_error TypeError
-
-    a.should == "piyo"
-  end
-
-  example "Class matching" do
-
-    subject.instance_eval do
-      (match ["this is array"] do
-        case?(Symbol) { :symbol }
-        case?(Hash) { :hash }
-        case?(Array) { :array }
-      end).should == :array
-    end
-  end
-
-  example "Class matching" do
-
-    subject.instance_eval do
-      (match ["this is array"] do
-        case?(Symbol => :symbol)
-        case?(Hash => :hash)
-        case?(Array => :array)
-      end).should == :array
-    end
-  end
-
-  example "Finally process" do
-
-    subject.instance_eval do
-      |; a|
-
-      match "hoge" do
-        case?("hoge") { a.should == nil; a = "fuga" }
-        finally { a.should == "fuga"; a = "piyo" }
-      end
+      end.should raise_error TypeError
 
       a.should == "piyo"
     end
