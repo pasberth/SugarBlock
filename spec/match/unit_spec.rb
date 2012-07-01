@@ -47,4 +47,42 @@ describe SugarReciever do
       expect { subject.case?("dummy") }.should raise_error NoMethodError
     end
   end
+
+  describe "#match" do
+  end
+
+  describe "#case?" do
+  end
+
+  describe "#default" do
+
+    describe "return value" do
+
+      it "should return the result of the matching case process if that has matched." do
+
+        subject.instance_eval do
+          (match "hoge" do
+             case?("hoge") { "bar" }
+             default { "fuga" }
+           end).should == "bar"
+        end
+      end
+
+      it "should return the result of the default process." do
+        
+        subject.instance_eval do
+          (match "hoge" do
+             case?("foo") { "bar" }
+             default { "fuga" }
+           end).should == "fuga"
+        end
+      end
+    end
+  end
+
+  describe "#finally" do
+
+    describe "return value" do
+    end
+  end
 end

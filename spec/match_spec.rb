@@ -63,6 +63,22 @@ describe SugarReciever do
     end
   end
 
+  context "Default process" do
+
+    example do
+      subject.instance_eval do
+        |; a|
+
+        (match "hoge" do
+           case?("foo") { a = "bar" }
+           default { |_| a = _ }
+         end).should == "hoge"
+
+        a.should == "hoge"
+      end
+    end
+  end
+
   context "Finally process" do
 
     example "about the return value and finally process." do

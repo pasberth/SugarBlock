@@ -11,6 +11,7 @@ module SugarBlock
 
         begin
           @cases.each &:call
+          @default_proc and @default_proc.call(*args)
         ensure
           @finnaly_proc and @finnaly_proc.call
         end
@@ -20,6 +21,11 @@ module SugarBlock
 
       def case? *os, &block
         @cases << lambda { os.each { |o| _case? o, &block } }
+        true
+      end
+
+      def default &block
+        @default_proc = lambda { |_| @hit ? nil : @result = block.call(_) }
         true
       end
 
